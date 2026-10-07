@@ -30,6 +30,12 @@ public struct WhistleZone: Equatable, Sendable {
     /// Seconds for the marker to cross the bar and come back.
     public let period: Double
 
+    public init(a: Double, b: Double, period: Double) {
+        self.a = a
+        self.b = b
+        self.period = period
+    }
+
     public func contains(_ pos: Double) -> Bool { pos >= a && pos <= b }
 }
 
