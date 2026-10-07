@@ -84,9 +84,20 @@ jobs:
           APP=$(find build/Build/Products -maxdepth 2 -name "WildwhistleIsle.app" | head -n 1)
           if [ -n "$APP" ]; then
             xcrun simctl install "$UDID" "$APP"
-            xcrun simctl launch "$UDID" com.kiefer0611.wildwhistleisle || true
-            sleep 10
-            xcrun simctl io "$UDID" screenshot ci-out/shots/launch.png || true
+            for d in start map battle guardian team guide notes islemap shrine help; do
+              xcrun simctl terminate "$UDID" com.kiefer0611.wildwhistleisle || true
+              xcrun simctl launch "$UDID" com.kiefer0611.wildwhistleisle -uitest -reset -demo "$d" || true
+              sleep 5
+              xcrun simctl io "$UDID" screenshot "ci-out/shots/$d.png" || true
+            done
+            xcrun simctl ui "$UDID" appearance dark || true
+            for d in map battle guide; do
+              xcrun simctl terminate "$UDID" com.kiefer0611.wildwhistleisle || true
+              xcrun simctl launch "$UDID" com.kiefer0611.wildwhistleisle -uitest -reset -demo "$d" || true
+              sleep 5
+              xcrun simctl io "$UDID" screenshot "ci-out/shots/dark-$d.png" || true
+            done
+            xcrun simctl ui "$UDID" appearance light || true
           fi
           if [ -d ci-out/result.xcresult ]; then
             xcrun xcresulttool export attachments --path ci-out/result.xcresult --output-path ci-out/attachments || true
@@ -100,7 +111,8 @@ jobs:
           cp -R ci-out/shots /tmp/ci-results/ 2>/dev/null || true
           cp -R ci-out/attachments /tmp/ci-results/ 2>/dev/null || true
           for f in build uitest core-test; do [ -f ci-out/$f.log ] && tail -n 400 ci-out/$f.log > /tmp/ci-results/$f.tail.log; done
-          grep -E "error:" ci-out/build.log | sort -u | head -n 200 > /tmp/ci-results/build-errors.txt || true
+          grep -hE "error:|error :" ci-out/build.log ci-out/uitest.log 2>/dev/null | sort -u | head -n 200 > /tmp/ci-results/build-errors.txt || true
+          grep -hE "Test Case|Executed|XCTAssert|failed" ci-out/uitest.log 2>/dev/null | head -n 120 > /tmp/ci-results/uitest-summary.txt || true
           echo "$GITHUB_SHA" > /tmp/ci-results/commit.txt
           cd /tmp/ci-results
           git init -q
