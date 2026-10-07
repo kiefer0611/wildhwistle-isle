@@ -54,11 +54,14 @@ struct ExploreView: View {
                 .overlay(RoundedRectangle(cornerRadius: 12).stroke(Theme.line, lineWidth: 1))
                 .overlay(alignment: .top) { toast }
                 .padding(.horizontal, 16)
+                .accessibilityElement(children: .ignore)
                 .accessibilityLabel("Island map. Tap a spot to walk there.")
+                .accessibilityValue("\(model.game?.steps ?? 0) steps taken")
                 .accessibilityIdentifier("map")
             status
         }
         .padding(.vertical, 8)
+        .accessibilityHidden(model.screen != .explore)
     }
 
     private var header: some View {

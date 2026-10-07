@@ -29,6 +29,7 @@ targets:
         INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.role-playing-games
         TARGETED_DEVICE_FAMILY: "1,2"
         SWIFT_VERSION: "5.0"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
   WildwhistleIsleUITests:
     type: bundle.ui-testing
     platform: iOS

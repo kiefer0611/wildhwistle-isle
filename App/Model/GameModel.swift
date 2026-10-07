@@ -20,7 +20,9 @@ final class GameModel: ObservableObject {
         case choose, whistle, swap, bag, done
     }
 
-    @Published private(set) var screen: Screen = .start
+    @Published private(set) var screen: Screen = .start {
+        didSet { scene.isPaused = screen != .explore }
+    }
     /// Bumped whenever anything in the game changes, so views redraw.
     @Published private(set) var revision = 0
     @Published var toast: String? = nil

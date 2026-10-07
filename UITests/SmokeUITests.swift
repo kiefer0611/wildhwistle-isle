@@ -48,6 +48,31 @@ final class SmokeUITests: XCTestCase {
         app.buttons["panelClose"].tap()
     }
 
+    func testTappingTheMapWalks() {
+        let app = launch()
+        XCTAssertTrue(app.buttons["setOut"].waitForExistence(timeout: 30))
+        app.buttons["setOut"].tap()
+        XCTAssertTrue(app.buttons["nav.team"].waitForExistence(timeout: 15))
+        let map = app.descendants(matching: .any).matching(identifier: "map").firstMatch
+        XCTAssertTrue(map.waitForExistence(timeout: 10))
+        let before = map.value as? String
+        XCTAssertEqual(before, "0 steps taken")
+        var moved = false
+        let spots: [(CGFloat, CGFloat)] = [(0.75, 0.5), (0.25, 0.5), (0.5, 0.3), (0.5, 0.7), (0.7, 0.35), (0.3, 0.65), (0.6, 0.6), (0.4, 0.4)]
+        for (dx, dy) in spots {
+            map.coordinate(withNormalizedOffset: CGVector(dx: dx, dy: dy)).tap()
+            sleep(2)
+            if app.buttons["act.leave"].exists { app.buttons["act.leave"].tap() }
+            if app.buttons["panelClose"].exists { app.buttons["panelClose"].tap() }
+            if map.waitForExistence(timeout: 5), let now = map.value as? String, now != before {
+                moved = true
+                break
+            }
+        }
+        XCTAssertTrue(moved, "tapping the map never moved the wanderer")
+        shot("walked")
+    }
+
     func testWildEncounterPlaysThrough() {
         let app = launch(["-demo", "battle"])
         XCTAssertTrue(app.buttons["act.nudge"].waitForExistence(timeout: 30))
