@@ -1,0 +1,88 @@
+Building for debugging...
+[0/13] Write sources
+[2/13] Write swift-version-24593BA9C3E375BF.txt
+[4/19] Compiling GameCore GameData.swift
+[5/19] Compiling GameCore MapGen.swift
+[6/19] Compiling GameCore Battle.swift
+[7/19] Compiling GameCore Game.swift
+[8/19] Emitting module GameCore
+[9/19] Compiling GameCore Rng.swift
+[10/20] Compiling GameCore Rules.swift
+[11/21] Wrapping AST for GameCore for debugging
+[13/26] Compiling GameCoreTests DataTests.swift
+[14/26] Compiling GameCoreTests Fixtures.swift
+[15/26] Emitting module GameCoreTests
+[16/26] Compiling GameCoreTests ParityTests.swift
+[17/26] Compiling GameCoreTests PlaythroughTests.swift
+[18/27] Compiling GameCoreTests SaveTests.swift
+[19/28] /__w/wildhwistle-isle/wildhwistle-isle/GameCore/.build/x86_64-unknown-linux-gnu/debug/GameCorePackageDiscoveredTests.derived/all-discovered-tests.swift
+[20/28] Write sources
+[21/28] Wrapping AST for GameCoreTests for debugging
+[23/31] Emitting module GameCorePackageDiscoveredTests
+[24/31] Compiling GameCorePackageDiscoveredTests all-discovered-tests.swift
+[25/31] Compiling GameCorePackageDiscoveredTests GameCoreTests.swift
+[26/32] /__w/wildhwistle-isle/wildhwistle-isle/GameCore/.build/x86_64-unknown-linux-gnu/debug/GameCorePackageTests.derived/runner.swift
+[27/32] Write sources
+[28/32] Wrapping AST for GameCorePackageDiscoveredTests for debugging
+[30/34] Compiling GameCorePackageTests runner.swift
+[31/34] Emitting module GameCorePackageTests
+[32/35] Wrapping AST for GameCorePackageTests for debugging
+[33/35] Write Objects.LinkFileList
+[34/35] Linking GameCorePackageTests.xctest
+Build complete! (6.91s)
+Test Suite 'All tests' started at 2026-10-07 20:28:19.016
+Test Suite 'debug.xctest' started at 2026-10-07 20:28:19.017
+Test Suite 'DataTests' started at 2026-10-07 20:28:19.017
+Test Case 'DataTests.testElementChartIsBalanced' started at 2026-10-07 20:28:19.017
+Test Case 'DataTests.testElementChartIsBalanced' passed (0.001 seconds)
+Test Case 'DataTests.testEveryIslandIsPlayable' started at 2026-10-07 20:28:19.018
+Test Case 'DataTests.testEveryIslandIsPlayable' passed (0.465 seconds)
+Test Case 'DataTests.testFortySpeciesWithArt' started at 2026-10-07 20:28:19.484
+Test Case 'DataTests.testFortySpeciesWithArt' passed (0.0 seconds)
+Test Case 'DataTests.testGrowthAndLevelCap' started at 2026-10-07 20:28:19.484
+Test Case 'DataTests.testGrowthAndLevelCap' passed (0.0 seconds)
+Test Case 'DataTests.testPoolsAndGuardians' started at 2026-10-07 20:28:19.484
+Test Case 'DataTests.testPoolsAndGuardians' passed (0.0 seconds)
+Test Suite 'DataTests' passed at 2026-10-07 20:28:19.484
+Executed 5 tests, with 0 failures (0 unexpected) in 0.467 (0.467) seconds
+Test Suite 'ParityTests' started at 2026-10-07 20:28:19.484
+Test Case 'ParityTests.testDamageMatches' started at 2026-10-07 20:28:19.484
+Test Case 'ParityTests.testDamageMatches' passed (0.0 seconds)
+Test Case 'ParityTests.testExperienceCurveMatches' started at 2026-10-07 20:28:19.485
+Test Case 'ParityTests.testExperienceCurveMatches' passed (0.0 seconds)
+Test Case 'ParityTests.testIslandsMatch' started at 2026-10-07 20:28:19.485
+Test Case 'ParityTests.testIslandsMatch' passed (0.088 seconds)
+Test Case 'ParityTests.testRandomSequenceMatches' started at 2026-10-07 20:28:19.573
+Test Case 'ParityTests.testRandomSequenceMatches' passed (0.0 seconds)
+Test Case 'ParityTests.testStatsMatch' started at 2026-10-07 20:28:19.573
+Test Case 'ParityTests.testStatsMatch' passed (0.0 seconds)
+Test Suite 'ParityTests' passed at 2026-10-07 20:28:19.574
+	 Executed 5 tests, with 0 failures (0 unexpected) in 0.089 (0.089) seconds
+Test Suite 'PlaythroughTests' started at 2026-10-07 20:28:19.574
+Test Case 'PlaythroughTests.testSameSeedPlaysTheSame' started at 2026-10-07 20:28:19.574
+Test Case 'PlaythroughTests.testSameSeedPlaysTheSame' passed (0.27 seconds)
+Test Case 'PlaythroughTests.testWholeGameCanBePlayedThrough' started at 2026-10-07 20:28:19.843
+playthrough 0: 273 encounters, 1079 turns, 2326 steps, 6 blackouts, 67 items, guardian tries [1, 1, 1, 5], top levels [40, 40, 40, 40]
+playthrough 1: 239 encounters, 1354 turns, 2261 steps, 21 blackouts, 76 items, guardian tries [4, 2, 3, 4], top levels [40, 40, 40, 40]
+playthrough 2: 202 encounters, 1043 turns, 1723 steps, 9 blackouts, 65 items, guardian tries [1, 1, 1, 3], top levels [40, 39, 39, 39]
+playthrough 3: 259 encounters, 1526 turns, 2353 steps, 19 blackouts, 64 items, guardian tries [5, 3, 1, 9], top levels [40, 40, 40, 40]
+playthrough 4: 269 encounters, 1506 turns, 2353 steps, 51 blackouts, 72 items, guardian tries [1, 4, 1, 3], top levels [40, 39, 39, 38]
+playthrough 5: 216 encounters, 1163 turns, 1792 steps, 13 blackouts, 68 items, guardian tries [3, 5, 2, 2], top levels [40, 38, 39, 38]
+Test Case 'PlaythroughTests.testWholeGameCanBePlayedThrough' passed (2.767 seconds)
+Test Suite 'PlaythroughTests' passed at 2026-10-07 20:28:22.610
+	 Executed 2 tests, with 0 failures (0 unexpected) in 3.036 (3.036) seconds
+Test Suite 'SaveTests' started at 2026-10-07 20:28:22.610
+Test Case 'SaveTests.testBrokenSavesAreRefused' started at 2026-10-07 20:28:22.610
+Test Case 'SaveTests.testBrokenSavesAreRefused' passed (0.003 seconds)
+Test Case 'SaveTests.testItemsAndNotes' started at 2026-10-07 20:28:22.613
+Test Case 'SaveTests.testItemsAndNotes' passed (0.003 seconds)
+Test Case 'SaveTests.testOddSavesAreRepaired' started at 2026-10-07 20:28:22.616
+Test Case 'SaveTests.testOddSavesAreRepaired' passed (0.006 seconds)
+Test Case 'SaveTests.testRoundTrip' started at 2026-10-07 20:28:22.622
+Test Case 'SaveTests.testRoundTrip' passed (0.073 seconds)
+Test Suite 'SaveTests' passed at 2026-10-07 20:28:22.695
+	 Executed 4 tests, with 0 failures (0 unexpected) in 0.085 (0.085) seconds
+Test Suite 'debug.xctest' passed at 2026-10-07 20:28:22.695
+	 Executed 16 tests, with 0 failures (0 unexpected) in 3.677 (3.677) seconds
+Test Suite 'All tests' passed at 2026-10-07 20:28:22.695
+	 Executed 16 tests, with 0 failures (0 unexpected) in 3.677 (3.677) seconds
