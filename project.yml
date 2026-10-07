@@ -1,0 +1,56 @@
+name: WildwhistleIsle
+options:
+  bundleIdPrefix: com.kiefer0611
+  deploymentTarget:
+    iOS: "16.0"
+  createIntermediateGroups: true
+packages:
+  GameCore:
+    path: GameCore
+targets:
+  WildwhistleIsle:
+    type: application
+    platform: iOS
+    sources:
+      - App
+    dependencies:
+      - package: GameCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.kiefer0611.wildwhistleisle
+        MARKETING_VERSION: "0.1.0"
+        CURRENT_PROJECT_VERSION: "1"
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: Wildwhistle
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UIRequiresFullScreen: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.role-playing-games
+        TARGETED_DEVICE_FAMILY: "1,2"
+        SWIFT_VERSION: "5.0"
+  WildwhistleIsleUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - UITests
+    dependencies:
+      - target: WildwhistleIsle
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.kiefer0611.wildwhistleisle.uitests
+        GENERATE_INFOPLIST_FILE: YES
+        SWIFT_VERSION: "5.0"
+        TEST_TARGET_NAME: WildwhistleIsle
+schemes:
+  WildwhistleIsle:
+    build:
+      targets:
+        WildwhistleIsle: all
+        WildwhistleIsleUITests: [test]
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - WildwhistleIsleUITests

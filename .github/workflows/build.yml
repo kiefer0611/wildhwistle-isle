@@ -1,0 +1,90 @@
+name: Build and test
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  core:
+    name: Game rules (Linux)
+    runs-on: ubuntu-latest
+    container: swift:5.10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run rule tests
+        working-directory: GameCore
+        run: swift test 2>&1 | tail -n 200
+
+  ios:
+    name: iPhone app (Mac)
+    runs-on: macos-15
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Tools
+        run: |
+          brew install xcodegen
+          xcodebuild -version
+          mkdir -p ci-out
+      - name: Generate project
+        run: xcodegen generate
+      - name: Pick a simulator
+        run: |
+          xcrun simctl list devices available | grep -E "iPhone" | head -n 20
+          UDID=$(xcrun simctl list devices available -j | python3 -c "import json,sys;d=json.load(sys.stdin)['devices'];c=[(k,x) for k,v in d.items() if 'iOS' in k for x in v if x['name'].startswith('iPhone') and x.get('isAvailable')];c.sort(key=lambda t:(t[0],'Pro' in t[1]['name']));print(c[-1][1]['udid'])")
+          echo "UDID=$UDID" >> "$GITHUB_ENV"
+          xcrun simctl boot "$UDID" || true
+          xcrun simctl bootstatus "$UDID" -b
+      - name: Build
+        run: |
+          set -o pipefail
+          xcodebuild -project WildwhistleIsle.xcodeproj -scheme WildwhistleIsle \
+            -destination "id=$UDID" -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO build-for-testing 2>&1 | tee ci-out/build.log | grep -E "error|warning: unre|BUILD|Compiling|Linking" | tail -n 150
+      - name: Rule tests on Mac
+        working-directory: GameCore
+        run: swift test 2>&1 | tee ../ci-out/core-test.log | tail -n 60
+      - name: UI tests
+        run: |
+          set -o pipefail
+          xcodebuild -project WildwhistleIsle.xcodeproj -scheme WildwhistleIsle \
+            -destination "id=$UDID" -derivedDataPath build -resultBundlePath ci-out/result.xcresult \
+            CODE_SIGNING_ALLOWED=NO test-without-building 2>&1 | tee ci-out/uitest.log | grep -E "error|Test Case|Test Suite|TEST|Executed" | tail -n 150
+      - name: Screenshots
+        if: always()
+        run: |
+          mkdir -p ci-out/shots
+          APP=$(find build/Build/Products -maxdepth 2 -name "WildwhistleIsle.app" | head -n 1)
+          if [ -n "$APP" ]; then
+            xcrun simctl install "$UDID" "$APP"
+            xcrun simctl launch "$UDID" com.kiefer0611.wildwhistleisle || true
+            sleep 10
+            xcrun simctl io "$UDID" screenshot ci-out/shots/launch.png || true
+          fi
+          if [ -d ci-out/result.xcresult ]; then
+            xcrun xcresulttool export attachments --path ci-out/result.xcresult --output-path ci-out/attachments || true
+          fi
+      - name: Publish results branch
+        if: always()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          rm -rf /tmp/ci-results && mkdir -p /tmp/ci-results
+          cp -R ci-out/shots /tmp/ci-results/ 2>/dev/null || true
+          cp -R ci-out/attachments /tmp/ci-results/ 2>/dev/null || true
+          for f in build uitest core-test; do [ -f ci-out/$f.log ] && tail -n 400 ci-out/$f.log > /tmp/ci-results/$f.tail.log; done
+          grep -E "error:" ci-out/build.log | sort -u | head -n 200 > /tmp/ci-results/build-errors.txt || true
+          echo "$GITHUB_SHA" > /tmp/ci-results/commit.txt
+          cd /tmp/ci-results
+          git init -q
+          git add -A
+          git -c user.name="ci" -c user.email="ci@users.noreply.github.com" commit -qm "Build results for $GITHUB_SHA"
+          git push -f "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:refs/heads/ci-results
