@@ -1,0 +1,13 @@
+Test Case '-[WildwhistleIsleUITests.SmokeUITests testGuardianCannotBeWhistledAndLeaveWorks]' started.
+Test Case '-[WildwhistleIsleUITests.SmokeUITests testGuardianCannotBeWhistledAndLeaveWorks]' passed (18.707 seconds).
+Test Case '-[WildwhistleIsleUITests.SmokeUITests testProgressIsSavedBetweenLaunches]' started.
+Test Case '-[WildwhistleIsleUITests.SmokeUITests testProgressIsSavedBetweenLaunches]' passed (16.288 seconds).
+Test Case '-[WildwhistleIsleUITests.SmokeUITests testStartToMapAndPanels]' started.
+Test Case '-[WildwhistleIsleUITests.SmokeUITests testStartToMapAndPanels]' passed (29.582 seconds).
+Test Case '-[WildwhistleIsleUITests.SmokeUITests testTappingTheMapWalks]' started.
+Test Case '-[WildwhistleIsleUITests.SmokeUITests testTappingTheMapWalks]' passed (27.672 seconds).
+Test Case '-[WildwhistleIsleUITests.SmokeUITests testWildEncounterPlaysThrough]' started.
+Test Case '-[WildwhistleIsleUITests.SmokeUITests testWildEncounterPlaysThrough]' passed (17.849 seconds).
+	 Executed 5 tests, with 0 failures (0 unexpected) in 110.098 (110.101) seconds
+	 Executed 5 tests, with 0 failures (0 unexpected) in 110.098 (110.102) seconds
+	 Executed 5 tests, with 0 failures (0 unexpected) in 110.098 (110.104) seconds
