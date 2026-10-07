@@ -20,8 +20,25 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Run rule tests
+        shell: bash
         working-directory: GameCore
-        run: swift test 2>&1 | tail -n 200
+        run: |
+          set -o pipefail
+          swift test 2>&1 | tee /tmp/core.log | tail -n 150
+      - name: Publish log
+        if: always()
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mkdir -p /tmp/core-results && cd /tmp/core-results
+          grep -E "error|warning: var|XCTAssert|failed|passed|Executed|playthrough|Compiling|Build complete" /tmp/core.log | head -n 400 > summary.txt || true
+          tail -n 300 /tmp/core.log > tail.log || true
+          echo "$GITHUB_SHA" > commit.txt
+          git init -q
+          git add -A
+          git -c user.name="ci" -c user.email="ci@users.noreply.github.com" commit -qm "Rule test results for $GITHUB_SHA"
+          git push -f "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:refs/heads/ci-core
 
   ios:
     name: iPhone app (Mac)
@@ -51,7 +68,9 @@ jobs:
             CODE_SIGNING_ALLOWED=NO build-for-testing 2>&1 | tee ci-out/build.log | grep -E "error|warning: unre|BUILD|Compiling|Linking" | tail -n 150
       - name: Rule tests on Mac
         working-directory: GameCore
-        run: swift test 2>&1 | tee ../ci-out/core-test.log | tail -n 60
+        run: |
+          set -o pipefail
+          swift test 2>&1 | tee ../ci-out/core-test.log | tail -n 60
       - name: UI tests
         run: |
           set -o pipefail
